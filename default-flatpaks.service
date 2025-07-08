@@ -10,3 +10,6 @@ ExecStartPre=/usr/bin/nm-online -q
 ExecStart=/usr/bin/default-flatpaks
 Restart=no
 
+[Install]
+WantedBy=gnome-session.target
+
