@@ -1,15 +1,14 @@
 [Unit]
 Description=install default flatpaks
 BindsTo=gnome-session.target
-After=gnome-session.target network-online.target
-ConditionPathExists=!/var/lib/default-flatpaks/done
+After=flatpak-add-flathub-repo.service network-online.target gnome-session.target
+Requires=flatpak-add-flathub-repo.service
+ConditionPathExists=!/var/lib/default-flatpaks/initialized
 
 [Service]
 Type=oneshot
-ExecStartPre=/usr/bin/nm-online -q
 ExecStart=/usr/bin/default-flatpaks
 Restart=no
 
 [Install]
 WantedBy=gnome-session.target
-
