@@ -2,7 +2,6 @@
 Description=install default flatpaks
 BindsTo=gnome-session.target
 After=flatpak-add-flathub-repo.service network-online.target gnome-session.target
-Requires=flatpak-add-flathub-repo.service
 ConditionPathExists=!/var/lib/default-flatpaks/initialized
 
 [Service]
