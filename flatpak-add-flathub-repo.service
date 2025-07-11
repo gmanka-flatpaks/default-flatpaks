@@ -1,12 +1,14 @@
 [Unit]
 Description=add flathub repo
-After=network-online.target
+After=network-online.target nss-lookup.target systemd-resolved.service
+Wants=network-online.target systemd-resolved.service
 ConditionPathExists=!/var/lib/default-flatpaks/initialized
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/bin/flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+ExecStartPre=bash -c 'until getent hosts dl.flathub.org; do sleep 1; done'
+ExecStart=flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 [Install]
 WantedBy=multi-user.target
