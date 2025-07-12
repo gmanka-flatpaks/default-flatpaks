@@ -7,7 +7,7 @@ ConditionPathExists=!/var/lib/default-flatpaks/initialized
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStartPre=bash -c 'until getent hosts dl.flathub.org; do sleep 1; done'
+ExecStartPre=/usr/bin/nm-online -q --timeout=2073600
 ExecStart=flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 [Install]
