@@ -1,13 +1,18 @@
 [Unit]
-Description=install default flatpaks
-BindsTo=gnome-session.target
+Description=install default flatpak apps
 After=flatpak-add-flathub-repo.service network-online.target gnome-session.target
-ConditionPathExists=!/var/lib/default-flatpaks/initialized
+ConditionPathExists=/var/lib/default-flatpaks/flathub-initialized
+ConditionPathExists=!/var/lib/default-flatpaks/default-flatpaks-initialized
 
 [Service]
-Type=oneshot
-ExecStart=/usr/bin/default-flatpaks
 Restart=no
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=sh -c 'until ping -c1 flathub.org >/dev/null 2>&1 ; do sleep 10; done'
+ExecStartPre=notify-send 'Installing default applications' 'You can check status with `systemctl --user status default-flatpaks`'
+ExecStart=xargs -a /etc/default-flatpaks/apps-list -- flatpak install --system -y flathub
+ExecStartPost=notify-send 'Default applications installed'
+ExecStartPost=touch /var/lib/default-flatpaks/default-flatpaks-initialized
 
 [Install]
 WantedBy=gnome-session.target

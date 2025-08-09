@@ -2,13 +2,16 @@
 Description=add flathub repo
 After=network-online.target nss-lookup.target systemd-resolved.service
 Wants=network-online.target systemd-resolved.service
-ConditionPathExists=!/var/lib/default-flatpaks/initialized
+ConditionPathExists=!/var/lib/default-flatpaks/flathub-initialized
 
 [Service]
+Restart=no
 Type=oneshot
 RemainAfterExit=yes
-ExecStartPre=/usr/bin/nm-online -q --timeout=2073600
+ExecStartPre=sh -c 'until ping -c1 flathub.org >/dev/null 2>&1 ; do sleep 10; done'
 ExecStart=flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+ExecStartPost=install -d -m 1777 /var/lib/default-flatpaks
+ExecStartPost=touch /var/lib/default-flatpaks/flathub-initialized
 
 [Install]
 WantedBy=multi-user.target
