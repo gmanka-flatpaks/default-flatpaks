@@ -1,6 +1,6 @@
 [Unit]
 Description=install default flatpak apps
-After=flatpak-add-flathub-repo.service network-online.target gnome-session.target
+After=network-online.target graphical-session.target
 ConditionPathExists=/var/lib/default-flatpaks/flathub-initialized
 ConditionPathExists=!/var/lib/default-flatpaks/default-flatpaks-initialized
 

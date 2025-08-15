@@ -1,0 +1,10 @@
+[Unit]
+Description=start default-flatpaks when flathub repo is initialized
+ConditionPathExists=!/var/lib/default-flatpaks/default-flatpaks-initialized
+
+[Path]
+PathExists=/var/lib/default-flatpaks/flathub-initialized
+Unit=default-flatpaks.service
+
+[Install]
+WantedBy=default.target
